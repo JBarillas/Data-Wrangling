@@ -1,3 +1,10 @@
+---
+title: "Laboratorio4"
+author: "Juan Barillas"
+date: "31/8/2020"
+output: html_document
+---
+
 ```{r}
 library(tidyverse)
 library(readr)
@@ -14,16 +21,10 @@ data$MOTIVO <- tolower(data$MOTIVO)
 data
 ```
 
-## Debemos invertir en la contratacion de mas personal?
-## Tenemos que calcular cuantas entregas realizan los empleados y ver si es necesario reducirlo contratando m[as gente.]
+Debemos invertir en la contratacion de mas personal?
+Tenemos que calcular cuantas entregas realizan los empleados y ver si es necesario reducirlo contratando m[as gente.]
+
 ```{r}
-pilotos <- data %>%
-  count(PILOTO)
-pilotos
-
-barplot(pilotos$n, names.arg = pilotos$PILOTO, las=2, cex.names = 0.5, space = 1, main = "Viajes realizados por piloto")
-
-
 entregas_piloto <- data %>%
   group_by(MES) %>%
   count(PILOTO)
@@ -32,10 +33,9 @@ mensuales %>%
   mutate(AVG = x/9)
 barplot(mensuales$x, names.arg = mensuales$MES, las=2, cex.names = 0.5, space = 1, main = "Viajes realizados por mes")
 count(PILOTO)
-### Los pilotos tienen entre 21 y 23 entregas al mes por lo que hacen 1 entrega por d[ia en un mes lo que no es un numero alto y no se necesita contratar a mas personas.]
 ```
+Los pilotos tienen entre 21 y 23 entregas al mes por lo que hacen 1 entrega por d[ia en un mes lo que no es un numero alto y no se necesita contratar a mas personas.]
 
-####################################################################################################
 ## Debemos invertir en la compra de mas vehiculos de distribuci[on?] Cu[antos y de que tipo?]
 
 ```{r}
@@ -86,8 +86,6 @@ data %>%
   count(MES)
 
 ```
-
-#####################################################################################################
 ## Las tarifas actuales son aceptables por el cliente?
 
 ```{r}
@@ -97,48 +95,7 @@ data %>%
 aggregate(entregas_piloto$n, by=list(MES=entregas_piloto$MES), FUN=sum)
 cat("Precio por unidad", (data$Q/data$CANTIDAD))
 
-#Todas las tarifas son las mismas por producto de $0.25 y podemos ver que existen siempre pedidos regulares por lo que podemos inferir que el precio es aceptado por nuestros clientes
-
 ```
-
-
-
-################################################Que estrategias debo seguir? ################################################
-
-####Conseguir mas entregas para que los pilotos no solo hagan un viaje por dia
-#### Comprar mas camiones peque;os ya que tienenden a aumentar en viajes a trav[es de los meses en el a;o o comprar camiones grandes debido a que nos generan la mayor cantidad de ingresos
-#### Llevar un mejor control de entregar segmentando mejor la informaci[on]
-
-
-## 80-20
-```{r}
-ventas <- aggregate(data$Q, by=list(CLIENTE=data$CLIENTE), FUN=sum)
-ventas
-
-barplot(ventas$x, names.arg = ventas$CLIENTE, las=2, cex.names = 0.5, space = 1, main = "Total de compras por cliente en Q")
-```
-
-######################################################################### Mejores pilotos y transportes mas efectivos
-```{r}
-entregas_piloto <= data %>%
-  filter(is.na(MOTIVO)) %>%
-  count(PILOTO)
-
-barplot(entregas_piloto$n, names.arg = entregas_piloto$PILOTO, las=2, cex.names = 0.75, space=1, main = "Entregas sin problemas por piloto")
-
-```
-
-```{r}
-entregas_piloto <- data %>%
-  filter(is.na(MOTIVO)) %>%
-  count(UNIDAD)
-
-barplot(entregas_piloto$n, names.arg = entregas_piloto$UNIDAD, las=2, cex.names = 0.75, space=1, main = "Entregas exitosas por unidad")
-
-```
-
-
-
-
+Todas las tarifas son las mismas por producto de $0.25 y podemos ver que existen siempre pedidos regulares por lo que podemos inferir que el precio es aceptado por nuestros clientes
 
 
